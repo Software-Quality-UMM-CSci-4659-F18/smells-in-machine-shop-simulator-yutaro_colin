@@ -2,7 +2,7 @@
 
 package applications;
 
-public class MachineShopSimulator extends JobHandler {
+public class MachineShopSimulator extends RunMachineShop {
     
     public static final String NUMBER_OF_MACHINES_MUST_BE_AT_LEAST_1 = "number of machines must be >= 1";
     public static final String NUMBER_OF_MACHINES_AND_JOBS_MUST_BE_AT_LEAST_1 = "number of machines and jobs must be >= 1";
@@ -11,7 +11,6 @@ public class MachineShopSimulator extends JobHandler {
     public static final String BAD_MACHINE_NUMBER_OR_TASK_TIME = "bad machine number or task time";
 
     private static int numMachines; // number of machines
-    private static int numJobs; // number of jobs
 
     // methods
     /**
@@ -69,21 +68,6 @@ public class MachineShopSimulator extends JobHandler {
             changeState(p);
     }
 
-    /** process all jobs to completion
-     * @param simulationResults*/
-    static void simulate(SimulationResults simulationResults) {
-        while (numJobs > 0) {// at least one job left
-            int nextToFinish = eList.nextEventMachine();
-            timeNow = eList.nextEventTime(nextToFinish);
-            // change job on machine nextToFinish
-            Job theJob = changeState(nextToFinish);
-            // move theJob to its next machine
-            // decrement numJobs if theJob has finished
-            if (theJob != null && !moveToNextMachine(theJob, simulationResults))
-                numJobs--;
-        }
-    }
-
     /** output wait times at machines
      * @param simulationResults*/
     static void outputStatistics(SimulationResults simulationResults) {
@@ -109,27 +93,4 @@ public class MachineShopSimulator extends JobHandler {
         simulationResults.setNumTasksPerMachine(numTasksPerMachine);
     }
 
-    public static SimulationResults runSimulation(SimulationSpecification specification) {
-        largeTime = Integer.MAX_VALUE;
-        timeNow = 0;
-        startShop(specification); // initial machine loading
-        SimulationResults simulationResults = new SimulationResults(numJobs);
-        simulate(simulationResults); // run all jobs through shop
-        outputStatistics(simulationResults);
-        return simulationResults;
-    }
-
-    /** entry point for machine shop simulator */
-    public static void main(String[] args) {
-        /*
-         * It's vital that we (re)set this to 0 because if the simulator is called
-         * multiple times (as happens in the acceptance tests), because timeNow
-         * is static it ends up carrying over from the last time it was run. I'm
-         * not convinced this is the best place for this to happen, though.
-         */
-        final SpecificationReader specificationReader = new SpecificationReader();
-        SimulationSpecification specification = specificationReader.readSpecification();
-        SimulationResults simulationResults = runSimulation(specification);
-        simulationResults.print();
-    }
 }
