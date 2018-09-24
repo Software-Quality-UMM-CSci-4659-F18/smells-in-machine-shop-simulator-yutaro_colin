@@ -63,7 +63,7 @@ public class FileIoTests {
         File outputFile = File.createTempFile("simulator", ".ouptut");
         PrintStream filePrintStream = new PrintStream(outputFile);
         System.setOut(filePrintStream);
-        MachineShopSimulator.main(new String[] { });
+        RunMachineShop.main(new String[] { });
         return outputFile;
     }
 

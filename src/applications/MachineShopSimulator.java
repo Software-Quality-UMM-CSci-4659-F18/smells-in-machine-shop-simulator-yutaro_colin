@@ -2,7 +2,7 @@
 
 package applications;
 
-public class MachineShopSimulator extends RunMachineShop {
+public class MachineShopSimulator {
     
     public static final String NUMBER_OF_MACHINES_MUST_BE_AT_LEAST_1 = "number of machines must be >= 1";
     public static final String NUMBER_OF_MACHINES_AND_JOBS_MUST_BE_AT_LEAST_1 = "number of machines and jobs must be >= 1";
@@ -10,7 +10,12 @@ public class MachineShopSimulator extends RunMachineShop {
     public static final String EACH_JOB_MUST_HAVE_AT_LEAST_1_TASK = "each job must have >= 1 task";
     public static final String BAD_MACHINE_NUMBER_OR_TASK_TIME = "bad machine number or task time";
 
+    // Data members of MachineShopSimulator
     private static int numMachines; // number of machines
+    static int timeNow; // current time
+    static EventList eList; // pointer to event list
+    static Machine[] machine; // array of machines
+    static int largeTime; // all machines finish before this
 
     // methods
     /**
@@ -30,7 +35,7 @@ public class MachineShopSimulator extends RunMachineShop {
             theJob.setArrivalTime(timeNow);
             // if p idle, schedule immediately
             if (eList.nextEventTime(p) == largeTime) {// machine is idle
-                changeState(p);
+                JobHandler.changeState(p);
             }
             return true;
         }
@@ -55,17 +60,17 @@ public class MachineShopSimulator extends RunMachineShop {
     static void startShop(SimulationSpecification specification) {
         // Move this to startShop when ready
         MachineShopSimulator.numMachines = specification.getNumMachines();
-        MachineShopSimulator.numJobs = specification.getNumJobs();
+        JobHandler.numJobs = specification.getNumJobs();
         createEventAndMachineQueues(specification);
 
         // Move this to startShop when ready
         setMachineChangeOverTimes(specification);
 
         // Move this to startShop when ready
-        setUpJobs(specification);
+        JobHandler.setUpJobs(specification);
 
         for (int p = 1; p <= numMachines; p++)
-            changeState(p);
+            JobHandler.changeState(p);
     }
 
     /** output wait times at machines

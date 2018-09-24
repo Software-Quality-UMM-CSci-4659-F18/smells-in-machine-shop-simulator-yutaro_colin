@@ -1,11 +1,8 @@
 package applications;
 
-public class JobHandler {
-    // data members of MachineShopSimulator
-    protected static int timeNow; // current time
-    protected static EventList eList; // pointer to event list
-    protected static Machine[] machine; // array of machines
-    protected static int largeTime; // all machines finish before this
+public class JobHandler extends MachineShopSimulator{
+
+    static int numJobs; // number of jobs
 
     /**
      * change the state of theMachine
@@ -41,7 +38,7 @@ public class JobHandler {
         return lastJob;
     }
 
-    protected static void setUpJobs(SimulationSpecification specification) {
+    static void setUpJobs(SimulationSpecification specification) {
         // input the jobs
         Job theJob;
         for (int i = 1; i <= specification.getNumJobs(); i++) {
