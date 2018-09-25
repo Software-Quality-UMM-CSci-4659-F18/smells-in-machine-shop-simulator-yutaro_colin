@@ -3,6 +3,7 @@ package applications;
 public class JobManager {
 
     static int numJobs; // number of jobs
+    static int firstMachine;
 
     /**
      * change the state of theMachine
@@ -41,20 +42,42 @@ public class JobManager {
     static void setUpJobs(SimulationSpecification specification) {
         // input the jobs
         Job theJob;
-        for (int i = 1; i <= specification.getNumJobs(); i++) {
-            int tasks = specification.getJobSpecifications(i).getNumTasks();
-            int firstMachine = 0; // machine for first task
 
-            // create the job
-            theJob = new Job(i);
-            for (int j = 1; j <= tasks; j++) {
-                int theMachine = specification.getJobSpecifications(i).getSpecificationsForTasks()[2*(j-1)+1];
-                int theTaskTime = specification.getJobSpecifications(i).getSpecificationsForTasks()[2*(j-1)+2];
-                if (j == 1)
-                    firstMachine = theMachine; // job's first machine
-                theJob.addTask(theMachine, theTaskTime); // add to
-            } // task queue
+        for (int i = 1; i <= specification.getNumJobs(); i++) {
+
+            theJob = addMachinesAndTaskTimes(i, specification);
             MachineShopSimulator.machine[firstMachine].getJobQ().put(theJob);
         }
     }
+
+    static Job addMachinesAndTaskTimes(int i, SimulationSpecification specification) {
+        Job theJob;
+        int tasks = specification.getJobSpecifications(i).getNumTasks();
+
+        theJob = new Job(i);
+
+        for (int j = 1; j <= tasks; j++) {
+            int theMachine = retrieveMachinesForTask(specification, i, j);
+            int theTaskTime = retreiveTimesForTask(specification, i, j);
+            if (j == 1)
+                firstMachine = theMachine;
+            theJob.addTask(theMachine, theTaskTime);
+        }
+        return theJob;
+    }
+
+    static int retrieveMachinesForTask(SimulationSpecification specification, int i, int j) {
+        int theMachine;
+        theMachine = specification.getJobSpecifications(i).getSpecificationsForTasks()[2 * (j - 1) + 1];
+
+        return theMachine;
+    }
+
+    static int retreiveTimesForTask(SimulationSpecification specification, int i, int j) {
+        int theTaskTime;
+        theTaskTime = specification.getJobSpecifications(i).getSpecificationsForTasks()[2 * (j - 1) + 2];
+
+        return theTaskTime;
+        }
 }
+
