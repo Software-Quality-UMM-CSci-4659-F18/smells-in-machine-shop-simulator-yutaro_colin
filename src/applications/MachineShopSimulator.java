@@ -11,7 +11,7 @@ public class MachineShopSimulator {
     public static final String BAD_MACHINE_NUMBER_OR_TASK_TIME = "bad machine number or task time";
 
     // Data members of MachineShopSimulator
-    private static int numMachines; // number of machines
+    static int numMachines; // number of machines
     static int timeNow; // current time
     static EventList eList; // pointer to event list
     static Machine[] machine; // array of machines
@@ -41,13 +41,13 @@ public class MachineShopSimulator {
         }
     }
 
-    private static void setMachineChangeOverTimes(SimulationSpecification specification) {
+    static void setMachineChangeOverTimes(SimulationSpecification specification) {
         for (int i = 1; i<=specification.getNumMachines(); ++i) {
             machine[i].setChangeTime(specification.getChangeOverTimes(i));
         }
     }
 
-    private static void createEventAndMachineQueues(SimulationSpecification specification) {
+    static void createEventAndMachineQueues(SimulationSpecification specification) {
         // create event and machine queues
         eList = new EventList(specification.getNumMachines(), largeTime);
         machine = new Machine[specification.getNumMachines() + 1];
@@ -55,34 +55,7 @@ public class MachineShopSimulator {
             machine[i] = new Machine();
     }
 
-    /** load first jobs onto each machine
-     * @param specification*/
-    static void startShop(SimulationSpecification specification) {
-        // Move this to startShop when ready
-        MachineShopSimulator.numMachines = specification.getNumMachines();
-        JobManager.numJobs = specification.getNumJobs();
-        createEventAndMachineQueues(specification);
-
-        // Move this to startShop when ready
-        setMachineChangeOverTimes(specification);
-
-        // Move this to startShop when ready
-        JobManager.setUpJobs(specification);
-
-        for (int p = 1; p <= numMachines; p++)
-            JobManager.changeState(p);
-    }
-
-    /** output wait times at machines
-     * @param simulationResults*/
-    static void outputStatistics(SimulationResults simulationResults) {
-        simulationResults.setFinishTime(timeNow);
-        simulationResults.setNumMachines(numMachines);
-        setNumTasksPerMachine(simulationResults);
-        setTotalWaitTimePerMachine(simulationResults);
-    }
-
-    private static void setTotalWaitTimePerMachine(SimulationResults simulationResults) {
+    static void setTotalWaitTimePerMachine(SimulationResults simulationResults) {
         int[] totalWaitTimePerMachine = new int[numMachines+1];
         for (int i=1; i<=numMachines; ++i) {
             totalWaitTimePerMachine[i] = machine[i].getTotalWait();
@@ -90,7 +63,7 @@ public class MachineShopSimulator {
         simulationResults.setTotalWaitTimePerMachine(totalWaitTimePerMachine);
     }
 
-    private static void setNumTasksPerMachine(SimulationResults simulationResults) {
+    static void setNumTasksPerMachine(SimulationResults simulationResults) {
         int[] numTasksPerMachine = new int[numMachines+1];
         for (int i=1; i<=numMachines; ++i) {
             numTasksPerMachine[i] = machine[i].getNumTasks();

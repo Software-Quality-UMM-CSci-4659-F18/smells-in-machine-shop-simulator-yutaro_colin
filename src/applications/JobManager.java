@@ -1,6 +1,6 @@
 package applications;
 
-public class JobManager extends MachineShopSimulator{
+public class JobManager {
 
     static int numJobs; // number of jobs
 
@@ -12,27 +12,27 @@ public class JobManager extends MachineShopSimulator{
     static Job changeState(int theMachine) {// Task on theMachine has finished,
                                             // schedule next one.
         Job lastJob;
-        if (machine[theMachine].getActiveJob() == null) {// in idle or change-over
+        if (MachineShopSimulator.machine[theMachine].getActiveJob() == null) {// in idle or change-over
                                                     // state
             lastJob = null;
             // wait over, ready for new job
-            if (machine[theMachine].getJobQ().isEmpty()) // no waiting job
-                eList.setFinishTime(theMachine, largeTime);
+            if (MachineShopSimulator.machine[theMachine].getJobQ().isEmpty()) // no waiting job
+                MachineShopSimulator.eList.setFinishTime(theMachine, MachineShopSimulator.largeTime);
             else {// take job off the queue and work on it
-                machine[theMachine].setActiveJob((Job) machine[theMachine].getJobQ()
+                MachineShopSimulator.machine[theMachine].setActiveJob((Job) MachineShopSimulator.machine[theMachine].getJobQ()
                         .remove());
-                machine[theMachine].setTotalWait(machine[theMachine].getTotalWait() + timeNow
-                        - machine[theMachine].getActiveJob().getArrivalTime());
-                machine[theMachine].setNumTasks(machine[theMachine].getNumTasks() + 1);
-                int t = machine[theMachine].getActiveJob().removeNextTask();
-                eList.setFinishTime(theMachine, timeNow + t);
+                MachineShopSimulator.machine[theMachine].setTotalWait(MachineShopSimulator.machine[theMachine].getTotalWait() + MachineShopSimulator.timeNow
+                        - MachineShopSimulator.machine[theMachine].getActiveJob().getArrivalTime());
+                MachineShopSimulator.machine[theMachine].setNumTasks(MachineShopSimulator.machine[theMachine].getNumTasks() + 1);
+                int t = MachineShopSimulator.machine[theMachine].getActiveJob().removeNextTask();
+                MachineShopSimulator.eList.setFinishTime(theMachine, MachineShopSimulator.timeNow + t);
             }
         } else {// task has just finished on machine[theMachine]
                 // schedule change-over time
-            lastJob = machine[theMachine].getActiveJob();
-            machine[theMachine].setActiveJob(null);
-            eList.setFinishTime(theMachine, timeNow
-                    + machine[theMachine].getChangeTime());
+            lastJob = MachineShopSimulator.machine[theMachine].getActiveJob();
+            MachineShopSimulator.machine[theMachine].setActiveJob(null);
+            MachineShopSimulator.eList.setFinishTime(theMachine, MachineShopSimulator.timeNow
+                    + MachineShopSimulator.machine[theMachine].getChangeTime());
         }
 
         return lastJob;
@@ -54,7 +54,7 @@ public class JobManager extends MachineShopSimulator{
                     firstMachine = theMachine; // job's first machine
                 theJob.addTask(theMachine, theTaskTime); // add to
             } // task queue
-            machine[firstMachine].getJobQ().put(theJob);
+            MachineShopSimulator.machine[firstMachine].getJobQ().put(theJob);
         }
     }
 }
