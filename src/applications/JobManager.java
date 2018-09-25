@@ -1,6 +1,6 @@
 package applications;
 
-public class JobHandler extends MachineShopSimulator{
+public class JobManager extends MachineShopSimulator{
 
     static int numJobs; // number of jobs
 

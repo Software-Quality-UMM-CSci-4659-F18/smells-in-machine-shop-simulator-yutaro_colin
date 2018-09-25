@@ -5,15 +5,15 @@ public class RunMachineShop extends MachineShopSimulator {
     /** process all jobs to completion
      * @param simulationResults*/
     static void simulate(SimulationResults simulationResults) {
-        while (JobHandler.numJobs > 0) {// at least one job left
+        while (JobManager.numJobs > 0) {// at least one job left
             int nextToFinish = eList.nextEventMachine();
             timeNow = eList.nextEventTime(nextToFinish);
             // change job on machine nextToFinish
-            Job theJob = JobHandler.changeState(nextToFinish);
+            Job theJob = JobManager.changeState(nextToFinish);
             // move theJob to its next machine
             // decrement numJobs if theJob has finished
             if (theJob != null && !MachineShopSimulator.moveToNextMachine(theJob, simulationResults))
-                JobHandler.numJobs--;
+                JobManager.numJobs--;
         }
     }
 
@@ -21,7 +21,7 @@ public class RunMachineShop extends MachineShopSimulator {
         largeTime = Integer.MAX_VALUE;
         timeNow = 0;
         MachineShopSimulator.startShop(specification); // initial machine loading
-        SimulationResults simulationResults = new SimulationResults(JobHandler.numJobs);
+        SimulationResults simulationResults = new SimulationResults(JobManager.numJobs);
         simulate(simulationResults); // run all jobs through shop
         MachineShopSimulator.outputStatistics(simulationResults);
         return simulationResults;

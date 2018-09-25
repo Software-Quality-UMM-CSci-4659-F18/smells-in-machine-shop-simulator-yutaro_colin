@@ -35,7 +35,7 @@ public class MachineShopSimulator {
             theJob.setArrivalTime(timeNow);
             // if p idle, schedule immediately
             if (eList.nextEventTime(p) == largeTime) {// machine is idle
-                JobHandler.changeState(p);
+                JobManager.changeState(p);
             }
             return true;
         }
@@ -60,17 +60,17 @@ public class MachineShopSimulator {
     static void startShop(SimulationSpecification specification) {
         // Move this to startShop when ready
         MachineShopSimulator.numMachines = specification.getNumMachines();
-        JobHandler.numJobs = specification.getNumJobs();
+        JobManager.numJobs = specification.getNumJobs();
         createEventAndMachineQueues(specification);
 
         // Move this to startShop when ready
         setMachineChangeOverTimes(specification);
 
         // Move this to startShop when ready
-        JobHandler.setUpJobs(specification);
+        JobManager.setUpJobs(specification);
 
         for (int p = 1; p <= numMachines; p++)
-            JobHandler.changeState(p);
+            JobManager.changeState(p);
     }
 
     /** output wait times at machines
