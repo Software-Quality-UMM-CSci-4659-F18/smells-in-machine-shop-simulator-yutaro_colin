@@ -24,17 +24,8 @@ public class RunMachineShop {
         startShop(specification); // initial machine loading
         SimulationResults simulationResults = new SimulationResults(numJobs);
         simulate(simulationResults); // run all jobs through shop
-        outputStatistics(simulationResults);
+        MachineShopSimulator.outputStatistics(simulationResults);
         return simulationResults;
-    }
-
-    /** output wait times at machines
-     * @param simulationResults*/
-    static void outputStatistics(SimulationResults simulationResults) {
-        simulationResults.setFinishTime(MachineShopSimulator.timeNow);
-        simulationResults.setNumMachines(MachineShopSimulator.numMachines);
-        MachineShopSimulator.setNumTasksPerMachine(simulationResults);
-        MachineShopSimulator.setTotalWaitTimePerMachine(simulationResults);
     }
 
     /** load first jobs onto each machine

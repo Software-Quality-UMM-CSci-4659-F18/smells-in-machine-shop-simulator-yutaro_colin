@@ -55,7 +55,7 @@ public class MachineShopSimulator {
             machine[i] = new Machine();
     }
 
-    static void setTotalWaitTimePerMachine(SimulationResults simulationResults) {
+    private static void setTotalWaitTimePerMachine(SimulationResults simulationResults) {
         int[] totalWaitTimePerMachine = new int[numMachines+1];
         for (int i=1; i<=numMachines; ++i) {
             totalWaitTimePerMachine[i] = machine[i].getTotalWait();
@@ -63,7 +63,7 @@ public class MachineShopSimulator {
         simulationResults.setTotalWaitTimePerMachine(totalWaitTimePerMachine);
     }
 
-    static void setNumTasksPerMachine(SimulationResults simulationResults) {
+    private static void setNumTasksPerMachine(SimulationResults simulationResults) {
         int[] numTasksPerMachine = new int[numMachines+1];
         for (int i=1; i<=numMachines; ++i) {
             numTasksPerMachine[i] = machine[i].getNumTasks();
@@ -89,6 +89,15 @@ public class MachineShopSimulator {
             } // task queue
             MachineShopSimulator.machine[firstMachine].getJobQ().put(theJob);
         }
+    }
+
+    /** output wait times at machines
+     * @param simulationResults*/
+    static void outputStatistics(SimulationResults simulationResults) {
+        simulationResults.setFinishTime(MachineShopSimulator.timeNow);
+        simulationResults.setNumMachines(MachineShopSimulator.numMachines);
+        setNumTasksPerMachine(simulationResults);
+        setTotalWaitTimePerMachine(simulationResults);
     }
 
 }
