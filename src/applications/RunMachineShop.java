@@ -9,7 +9,7 @@ public class RunMachineShop {
             int nextToFinish = MachineShopSimulator.eList.nextEventMachine();
             MachineShopSimulator.timeNow = MachineShopSimulator.eList.nextEventTime(nextToFinish);
             // change job on machine nextToFinish
-            Job theJob = JobManager.changeState(nextToFinish);
+            Job theJob = MachineShopSimulator.machine[nextToFinish].changeState(MachineShopSimulator.eList, nextToFinish);
             // move theJob to its next machine
             // decrement numJobs if theJob has finished
             if (theJob != null && !MachineShopSimulator.moveToNextMachine(theJob, simulationResults))
@@ -51,7 +51,7 @@ public class RunMachineShop {
         JobManager.setUpJobs(specification);
 
         for (int p = 1; p <= MachineShopSimulator.numMachines; p++)
-            JobManager.changeState(p);
+            MachineShopSimulator.machine[p].changeState(MachineShopSimulator.eList, p);
     }
 
     /** entry point for machine shop simulator */
