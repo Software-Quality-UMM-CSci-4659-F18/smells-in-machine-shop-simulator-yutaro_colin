@@ -1,11 +1,12 @@
 package applications;
 
 public class RunMachineShop {
+    static int numJobs; // number of jobs
 
     /** process all jobs to completion
      * @param simulationResults*/
     static void simulate(SimulationResults simulationResults) {
-        while (JobManager.numJobs > 0) {// at least one job left
+        while (numJobs > 0) {// at least one job left
             int nextToFinish = MachineShopSimulator.eList.nextEventMachine();
             MachineShopSimulator.timeNow = MachineShopSimulator.eList.nextEventTime(nextToFinish);
             // change job on machine nextToFinish
@@ -13,7 +14,7 @@ public class RunMachineShop {
             // move theJob to its next machine
             // decrement numJobs if theJob has finished
             if (theJob != null && !MachineShopSimulator.moveToNextMachine(theJob, simulationResults))
-                JobManager.numJobs--;
+                numJobs--;
         }
     }
 
@@ -21,19 +22,10 @@ public class RunMachineShop {
         MachineShopSimulator.largeTime = Integer.MAX_VALUE;
         MachineShopSimulator.timeNow = 0;
         startShop(specification); // initial machine loading
-        SimulationResults simulationResults = new SimulationResults(JobManager.numJobs);
+        SimulationResults simulationResults = new SimulationResults(numJobs);
         simulate(simulationResults); // run all jobs through shop
-        outputStatistics(simulationResults);
+        MachineShopSimulator.outputStatistics(simulationResults);
         return simulationResults;
-    }
-
-    /** output wait times at machines
-     * @param simulationResults*/
-    static void outputStatistics(SimulationResults simulationResults) {
-        simulationResults.setFinishTime(MachineShopSimulator.timeNow);
-        simulationResults.setNumMachines(MachineShopSimulator.numMachines);
-        MachineShopSimulator.setNumTasksPerMachine(simulationResults);
-        MachineShopSimulator.setTotalWaitTimePerMachine(simulationResults);
     }
 
     /** load first jobs onto each machine
@@ -41,14 +33,14 @@ public class RunMachineShop {
     static void startShop(SimulationSpecification specification) {
         // Move this to startShop when ready
         MachineShopSimulator.numMachines = specification.getNumMachines();
-        JobManager.numJobs = specification.getNumJobs();
+        numJobs = specification.getNumJobs();
         MachineShopSimulator.createEventAndMachineQueues(specification);
 
         // Move this to startShop when ready
         MachineShopSimulator.setMachineChangeOverTimes(specification);
 
         // Move this to startShop when ready
-        JobManager.setUpJobs(specification);
+        MachineShopSimulator.setUpJobs(specification);
 
         for (int p = 1; p <= MachineShopSimulator.numMachines; p++)
             MachineShopSimulator.machine[p].changeState(MachineShopSimulator.eList, p, MachineShopSimulator.timeNow);
