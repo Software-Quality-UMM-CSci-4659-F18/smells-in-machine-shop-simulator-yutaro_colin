@@ -56,7 +56,7 @@ class Machine {
      *
      * @return last job run on this machine
      */
-    Job changeState(EventList eList, int theMachine) {// Task on theMachine has finished,
+    Job changeState(EventList eList, int theMachine, int timeNow) {// Task on theMachine has finished,
         // schedule next one.
         Job lastJob;
         if (getActiveJob() == null) {// in idle or change-over
@@ -66,20 +66,17 @@ class Machine {
             if (getJobQ().isEmpty()) // no waiting job
                 eList.setFinishTime(theMachine, MachineShopSimulator.largeTime);
             else {// take job off the queue and work on it
-                MachineShopSimulator.machine[theMachine].setActiveJob((Job) MachineShopSimulator.machine[theMachine].getJobQ()
-                        .remove());
-                MachineShopSimulator.machine[theMachine].setTotalWait(MachineShopSimulator.machine[theMachine].getTotalWait() + MachineShopSimulator.timeNow
-                        - MachineShopSimulator.machine[theMachine].getActiveJob().getArrivalTime());
-                MachineShopSimulator.machine[theMachine].setNumTasks(MachineShopSimulator.machine[theMachine].getNumTasks() + 1);
-                int t = MachineShopSimulator.machine[theMachine].getActiveJob().removeNextTask();
-                MachineShopSimulator.eList.setFinishTime(theMachine, MachineShopSimulator.timeNow + t);
+                setActiveJob((Job) getJobQ().remove());
+                setTotalWait(getTotalWait() + timeNow - getActiveJob().getArrivalTime());
+                setNumTasks(getNumTasks() + 1);
+                int t = getActiveJob().removeNextTask();
+                eList.setFinishTime(theMachine, timeNow + t);
             }
         } else {// task has just finished on machine[theMachine]
             // schedule change-over time
-            lastJob = MachineShopSimulator.machine[theMachine].getActiveJob();
-            MachineShopSimulator.machine[theMachine].setActiveJob(null);
-            MachineShopSimulator.eList.setFinishTime(theMachine, MachineShopSimulator.timeNow
-                    + MachineShopSimulator.machine[theMachine].getChangeTime());
+            lastJob = getActiveJob();
+            setActiveJob(null);
+            eList.setFinishTime(theMachine, timeNow + getChangeTime());
         }
 
         return lastJob;
