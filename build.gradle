@@ -33,4 +33,4 @@ run {
     standardInput = System.in
 }
 
-mainClassName = 'applications.MachineShopSimulator'
+mainClassName = 'applications.RunMachineShop'
