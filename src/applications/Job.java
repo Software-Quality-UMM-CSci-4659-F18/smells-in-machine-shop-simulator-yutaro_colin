@@ -30,6 +30,11 @@ class Job {
         return theTime;
     }
 
+    public int getMachineNumber() {
+       int machineNumber = ((Task) getTaskQ().getFrontElement()).getMachine();
+       return machineNumber;
+    }
+
     public LinkedQueue getTaskQ() {
         return taskQ;
     }
