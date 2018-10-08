@@ -81,4 +81,8 @@ class Machine {
 
         return lastJob;
     }
+
+    public void addJob(Job theJob) {
+        getJobQ().put(theJob);
+    }
 }
