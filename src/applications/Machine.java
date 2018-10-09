@@ -31,24 +31,17 @@ class Machine {
         return totalWait;
     }
 
-    public void setTotalWait(int totalWait) {
-        this.totalWait = totalWait;
-    }
-
     public int getNumTasks() {
         return numTasks;
     }
 
-    public void setNumTasks(int numTasks) {
-        this.numTasks = numTasks;
-    }
 
-    public Job getActiveJob() {
-        return activeJob;
-    }
-
-    public void setActiveJob(Job activeJob) {
-        this.activeJob = activeJob;
+    void processJob(EventList eList, int theMachine, int timeNow) {
+        activeJob = (Job)jobQ.remove();
+        totalWait = totalWait + timeNow - activeJob.getArrivalTime();
+        numTasks++;
+        int t = activeJob.removeNextTask();
+        eList.setFinishTime(theMachine, timeNow + t);
     }
 
     /**
@@ -59,24 +52,19 @@ class Machine {
     Job changeState(EventList eList, int theMachine, int timeNow) {// Task on theMachine has finished,
         // schedule next one.
         Job lastJob;
-        if (getActiveJob() == null) {// in idle or change-over
-            // state
+        if (activeJob == null) {// in idle or change-over state
             lastJob = null;
+
             // wait over, ready for new job
-            if (getJobQ().isEmpty()) // no waiting job
+            if (jobQ.isEmpty())  // no waiting job
                 eList.setFinishTime(theMachine, MachineShopSimulator.getLargeTime());
-            else {// take job off the queue and work on it
-                setActiveJob((Job) getJobQ().remove());
-                setTotalWait(getTotalWait() + timeNow - getActiveJob().getArrivalTime());
-                setNumTasks(getNumTasks() + 1);
-                int t = getActiveJob().removeNextTask();
-                eList.setFinishTime(theMachine, timeNow + t);
-            }
-        } else {// task has just finished on machine[theMachine]
-            // schedule change-over time
-            lastJob = getActiveJob();
-            setActiveJob(null);
-            eList.setFinishTime(theMachine, timeNow + getChangeTime());
+
+            else { processJob(eList, theMachine, timeNow); } // take job off the queue and work on it
+
+        } else {   // task has just finished on machine[theMachine]
+            lastJob = activeJob;
+            activeJob = null;
+            eList.setFinishTime(theMachine, timeNow + getChangeTime()); // Schedule change-over time
         }
 
         return lastJob;
