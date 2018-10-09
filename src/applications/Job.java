@@ -31,7 +31,9 @@ class Job {
     }
 
     public int getMachineNumber() {
-       int machineNumber = ((Task) getTaskQ().getFrontElement()).getMachine();
+        LinkedQueue taskQ = getTaskQ();
+        Task frontElement = (Task)taskQ.getFrontElement();
+        int machineNumber = frontElement.getMachine();
        return machineNumber;
     }
 
