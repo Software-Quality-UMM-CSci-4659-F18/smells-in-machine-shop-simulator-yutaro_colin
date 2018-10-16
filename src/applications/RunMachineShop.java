@@ -13,8 +13,8 @@ public class RunMachineShop {
             MachineShopSimulator.setTimeNow(nextEventTime);
             // change job on machine nextToFinish
             Machine nextMachineToFinish = MachineShopSimulator.getMachine(nextToFinish);
-            Job theJob = nextMachineToFinish.changeState(eList, nextToFinish, nextEventTime);
             // move theJob to its next machine
+            Job theJob = nextMachineToFinish.changeState(eList, nextToFinish, nextEventTime);
             // decrement numJobs if theJob has finished
             if (theJob != null && !MachineShopSimulator.moveToNextMachine(theJob, simulationResults))
                 numJobs--;
