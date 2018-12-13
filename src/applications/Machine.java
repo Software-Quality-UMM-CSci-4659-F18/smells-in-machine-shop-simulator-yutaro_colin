@@ -51,6 +51,10 @@ class Machine {
         this.activeJob = activeJob;
     }
 
+    public void addJob(Job job) {
+        getJobQ().put(job);
+    }
+
     /**
      * change the state of theMachine
      *
@@ -80,9 +84,5 @@ class Machine {
         }
 
         return lastJob;
-    }
-
-    public void addJob(Job theJob) {
-        getJobQ().put(theJob);
     }
 }

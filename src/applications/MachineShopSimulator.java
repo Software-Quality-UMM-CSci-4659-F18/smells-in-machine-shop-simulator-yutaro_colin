@@ -29,13 +29,13 @@ public class MachineShopSimulator {
             return false;
         } else {// theJob has a next task
                 // get machine for next task
-            int p = theJob.getMachineNumber();
-            // put on machine p's wait queue
-            machine[p].addJob(theJob);
+            int machineNumber = theJob.getMachineNumber();
+            // put on this machine's wait queue
+            machine[machineNumber].addJob(theJob);
             theJob.setArrivalTime(timeNow);
-            // if p idle, schedule immediately
-            if (eList.nextEventTime(p) == largeTime) {// machine is idle
-                machine[p].changeState(eList, p, timeNow);
+            // if this machine is idle, schedule immediately
+            if (eList.nextEventTime(machineNumber) == largeTime) {// machine is idle
+                machine[machineNumber].changeState(eList, machineNumber, timeNow);
             }
             return true;
         }
@@ -74,18 +74,20 @@ public class MachineShopSimulator {
     static void setUpJobs(SimulationSpecification specification) {
         // input the jobs
         Job theJob;
+        // i represents a jobNumber
         for (int i = 1; i <= specification.getNumJobs(); i++) {
-            int tasks = specification.getJobTasks(i);
+            int taskNum = specification.getNumTasksInJob(i);
             int firstMachine = 0; // machine for first task
 
             // create the job
             theJob = new Job(i);
-            for (int j = 1; j <= tasks; j++) {
-                int theMachine = specification.getMachineForJobTask(i,j);
-                int theTaskTime = specification.getTimeForJobTask(i,j);
+            // j represents a taskNumber
+            for (int j = 1; j <= taskNum; j++) {
+                int machine = specification.getMachineForJobTask(i,j);
+                int taskTime = specification.getTimeForJobTask(i,j);
                 if (j == 1)
-                    firstMachine = theMachine; // job's first machine
-                theJob.addTask(theMachine, theTaskTime); // add to
+                    firstMachine = machine; // job's first machine
+                theJob.addTask(machine, taskTime); // add to
             } // task queue
             machine[firstMachine].addJob(theJob);
         }

@@ -46,7 +46,7 @@ public class SimulationSpecification {
         return jobSpecifications[jobNumber];
     }
 
-    public int getJobTasks(int jobNumber) {
+    public int getNumTasksInJob(int jobNumber) {
         int numTasks = getJobSpecifications(jobNumber).getNumTasks();
         return numTasks;
     }
