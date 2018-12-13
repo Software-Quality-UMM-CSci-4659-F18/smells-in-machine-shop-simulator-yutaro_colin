@@ -1,5 +1,7 @@
 package applications;
 
+import exceptions.MyInputException;
+
 import java.util.Arrays;
 
 public class SimulationSpecification {
@@ -42,6 +44,19 @@ public class SimulationSpecification {
 
     public JobSpecification getJobSpecifications(int jobNumber) {
         return jobSpecifications[jobNumber];
+    }
+
+    public int getNumTasksInJob(int jobNumber) {
+        int numTasks = getJobSpecifications(jobNumber).getNumTasks();
+        return numTasks;
+    }
+
+    public int getMachineForJobTask(int jobNumber, int taskNumber) {
+        return getJobSpecifications(jobNumber).getSpecificationsForTasks()[2*(taskNumber-1)+1];
+    }
+
+    public int getTimeForJobTask(int jobNumber, int taskNumber) {
+        return getJobSpecifications(jobNumber).getSpecificationsForTasks()[2*(taskNumber-1)+2];
     }
 
     @Override
