@@ -68,7 +68,7 @@ class Machine {
             lastJob = null;
             // wait over, ready for new job
             if (getJobQ().isEmpty()) // no waiting job
-                eList.setFinishTime(theMachine, MachineShopSimulator.largeTime);
+                eList.setFinishTime(theMachine, MachineShopSimulator.getLargeTime());
             else {// take job off the queue and work on it
                 setActiveJob((Job) getJobQ().remove());
                 setTotalWait(getTotalWait() + timeNow - getActiveJob().getArrivalTime());

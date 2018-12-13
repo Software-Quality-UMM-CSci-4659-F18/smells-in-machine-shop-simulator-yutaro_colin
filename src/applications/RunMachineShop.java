@@ -7,11 +7,14 @@ public class RunMachineShop {
      * @param simulationResults*/
     static void simulate(SimulationResults simulationResults) {
         while (numJobs > 0) {// at least one job left
-            int nextToFinish = MachineShopSimulator.eList.nextEventMachine();
-            MachineShopSimulator.timeNow = MachineShopSimulator.eList.nextEventTime(nextToFinish);
+            EventList eList = MachineShopSimulator.getEventList();
+            int nextToFinish = eList.nextEventMachine();
+            int nextEventTime = eList.nextEventTime(nextToFinish);
+            MachineShopSimulator.setTimeNow(nextEventTime);
             // change job on machine nextToFinish
-            Job theJob = MachineShopSimulator.machine[nextToFinish].changeState(MachineShopSimulator.eList, nextToFinish, MachineShopSimulator.timeNow);
+            Machine nextMachineToFinish = MachineShopSimulator.getMachine(nextToFinish);
             // move theJob to its next machine
+            Job theJob = nextMachineToFinish.changeState(eList, nextToFinish, nextEventTime);
             // decrement numJobs if theJob has finished
             if (theJob != null && !MachineShopSimulator.moveToNextMachine(theJob, simulationResults))
                 numJobs--;
@@ -19,8 +22,8 @@ public class RunMachineShop {
     }
 
     public static SimulationResults runSimulation(SimulationSpecification specification) {
-        MachineShopSimulator.largeTime = Integer.MAX_VALUE;
-        MachineShopSimulator.timeNow = 0;
+        MachineShopSimulator.setLargeTime(Integer.MAX_VALUE);
+        MachineShopSimulator.setTimeNow(0);
         startShop(specification); // initial machine loading
         SimulationResults simulationResults = new SimulationResults(numJobs);
         simulate(simulationResults); // run all jobs through shop
@@ -32,7 +35,7 @@ public class RunMachineShop {
      * @param specification*/
     static void startShop(SimulationSpecification specification) {
         // Move this to startShop when ready
-        MachineShopSimulator.numMachines = specification.getNumMachines();
+        MachineShopSimulator.setNumMachines(specification.getNumMachines());
         numJobs = specification.getNumJobs();
         MachineShopSimulator.createEventAndMachineQueues(specification);
 
@@ -42,8 +45,15 @@ public class RunMachineShop {
         // Move this to startShop when ready
         MachineShopSimulator.setUpJobs(specification);
 
-        for (int p = 1; p <= MachineShopSimulator.numMachines; p++)
-            MachineShopSimulator.machine[p].changeState(MachineShopSimulator.eList, p, MachineShopSimulator.timeNow);
+        int numMachines = MachineShopSimulator.getNumMachines();
+
+        for (int p = 1; p <= numMachines; p++) {
+            Machine machine = MachineShopSimulator.getMachine(p);
+            EventList eList = MachineShopSimulator.getEventList();
+            int timeNow = MachineShopSimulator.getTimeNow();
+
+            machine.changeState(eList, p, timeNow);
+        }
     }
 
     /** entry point for machine shop simulator */

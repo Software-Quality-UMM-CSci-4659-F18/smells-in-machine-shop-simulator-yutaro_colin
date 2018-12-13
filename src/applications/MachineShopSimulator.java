@@ -11,11 +11,28 @@ public class MachineShopSimulator {
     public static final String BAD_MACHINE_NUMBER_OR_TASK_TIME = "bad machine number or task time";
 
     // Data members of MachineShopSimulator
-    static int numMachines; // number of machines
-    static int timeNow; // current time
-    static EventList eList; // pointer to event list
-    static Machine[] machine; // array of machines
-    static int largeTime; // all machines finish before this
+    public static int numMachines; // number of machines
+    public static int timeNow; // current time
+    public static EventList eList; // pointer to event list
+    public static Machine[] machine; // array of machines
+    public static int largeTime; // all machines finish before this
+
+    // Get and Set methods
+    static int getNumMachines() { return numMachines;}
+
+    static int getTimeNow() { return timeNow; }
+
+    static EventList getEventList() { return eList; }
+
+    static Machine getMachine(int machineNumber) { return machine[machineNumber]; }
+
+    static int getLargeTime() { return largeTime; }
+
+    static void setTimeNow(int nextEventTime) { timeNow = nextEventTime; }
+
+    static void setLargeTime(int theTime) { largeTime = theTime; }
+
+    static void setNumMachines(int numberOfMachines) { numMachines = numberOfMachines; }
 
     // methods
     /**
@@ -101,5 +118,4 @@ public class MachineShopSimulator {
         setNumTasksPerMachine(simulationResults);
         setTotalWaitTimePerMachine(simulationResults);
     }
-
 }
