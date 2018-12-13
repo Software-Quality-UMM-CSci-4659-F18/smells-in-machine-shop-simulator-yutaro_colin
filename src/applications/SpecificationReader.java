@@ -30,11 +30,15 @@ public class SpecificationReader {
 
     private void readJobSpecifications() {
         // input the jobs
-        JobSpecification[] jobSpecifications = new JobSpecification[specification.getNumJobs()+1];
-        for (int i=1; i <= specification.getNumJobs(); i++) {
+        JobSpecification[] jobSpecifications = new JobSpecification[specification.getNumJobs() + 1];
+        for (int i = 1; i <= specification.getNumJobs(); i++) {
             jobSpecifications[i] = new JobSpecification();
         }
         specification.setJobSpecification(jobSpecifications);
+        readNumTasksForJobs(jobSpecifications);
+    }
+
+    private void readNumTasksForJobs(JobSpecification[] jobSpecifications) {
         for (int i = 1; i <= specification.getNumJobs(); i++) {
             System.out.println("Enter number of tasks for job " + i);
             int tasks = keyboard.readInteger(); // number of tasks
@@ -46,16 +50,21 @@ public class SpecificationReader {
 
             System.out.println("Enter the tasks (machine, time)"
                     + " in process order");
-            for (int j = 1; j <= tasks; j++) { // get tasks for job i
-                int theMachine = keyboard.readInteger();
-                int theTaskTime = keyboard.readInteger();
-                if (theMachine < 1 || theMachine > specification.getNumMachines()
-                        || theTaskTime < 1)
-                    throw new MyInputException(MachineShopSimulator.BAD_MACHINE_NUMBER_OR_TASK_TIME);
-                specificationsForTasks[2*(j-1)+1] = theMachine;
-                specificationsForTasks[2*(j-1)+2] = theTaskTime;
-            }
+            readTasks(tasks, specificationsForTasks);
             specification.setSpecificationsForTasks(i, specificationsForTasks);
+        }
+
+    }
+
+    private void readTasks(int tasks, int[] specificationsForTasks) {
+        for (int j = 1; j <= tasks; j++) { // get tasks for job i
+            int theMachine = keyboard.readInteger();
+            int theTaskTime = keyboard.readInteger();
+            if (theMachine < 1 || theMachine > specification.getNumMachines()
+                    || theTaskTime < 1)
+                throw new MyInputException(MachineShopSimulator.BAD_MACHINE_NUMBER_OR_TASK_TIME);
+            specificationsForTasks[2*(j-1)+1] = theMachine;
+            specificationsForTasks[2*(j-1)+2] = theTaskTime;
         }
     }
 
