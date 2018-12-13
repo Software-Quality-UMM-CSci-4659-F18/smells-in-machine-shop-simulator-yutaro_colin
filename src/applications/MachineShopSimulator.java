@@ -11,11 +11,11 @@ public class MachineShopSimulator {
     public static final String BAD_MACHINE_NUMBER_OR_TASK_TIME = "bad machine number or task time";
 
     // Data members of MachineShopSimulator
-    private static int numMachines; // number of machines
-    private static int timeNow; // current time
-    private static EventList eList; // pointer to event list
-    private static Machine[] machine; // array of machines
-    private static int largeTime; // all machines finish before this
+    public static int numMachines; // number of machines
+    public static int timeNow; // current time
+    public static EventList eList; // pointer to event list
+    public static Machine[] machine; // array of machines
+    public static int largeTime; // all machines finish before this
 
     // Get and Set methods
     static int getNumMachines() { return numMachines;}

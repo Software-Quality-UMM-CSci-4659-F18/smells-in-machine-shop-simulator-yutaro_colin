@@ -48,11 +48,11 @@ public class RunMachineShop {
         int numMachines = MachineShopSimulator.getNumMachines();
 
         for (int p = 1; p <= numMachines; p++) {
-            Machine theMachine = MachineShopSimulator.getMachine(p);
+            Machine machine = MachineShopSimulator.getMachine(p);
             EventList eList = MachineShopSimulator.getEventList();
             int timeNow = MachineShopSimulator.getTimeNow();
 
-            theMachine.changeState(eList, p, timeNow);
+            machine.changeState(eList, p, timeNow);
         }
     }
 
